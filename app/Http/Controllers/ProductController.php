@@ -38,7 +38,7 @@ class ProductController extends Controller
     function getById($id)
     {
         $data = Product::where('id',$id)->first();
-        
+
         return response()->json(
             [
                 "message" => "Success",
@@ -47,21 +47,45 @@ class ProductController extends Controller
         );
     }
 
-    function put($id)
+    function put($id, Request $request)
     {
+        $product = Product::where('id',$id)->first();
+        if($product){
+            $product->name = $request->name ? $request->name : $product->name;
+            $product->price = $request->price ? $request->price : $product->price;
+
+            $product->save();
+            return response()->json(
+                [
+                    "message" => "PUT Method Success ",
+                    "data" => $product
+                ]
+            );
+        }
         return response()->json(
             [
-                "message" => "PUT Method Success ". $id
-            ]
+                "message" => "PUT Method Failed ". $id
+            ],
+            400
         );
     }
 
     function delete($id)
     {
+        $product = Product::where('id',$id)->first();
+        if($product){
+            $product->delete();
+            return response()->json(
+                [
+                    "message" => "DELETE Method Success ". $id
+                ]
+            );
+        }
         return response()->json(
             [
-                "message" => "DELETE Method Success ". $id
-            ]
+                "message" => "Delete Method Failed ". $id
+            ],
+            400
         );
     }
 }
