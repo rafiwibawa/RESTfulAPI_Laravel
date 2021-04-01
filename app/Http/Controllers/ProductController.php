@@ -7,7 +7,8 @@ use App\Product;
 
 class ProductController extends Controller
 {
-    function post(Request $request){
+    function post(Request $request)
+    {
         $product = new Product();
         $product->name = $request->name;
         $product->price = $request->price;
@@ -22,15 +23,32 @@ class ProductController extends Controller
         );
     }
 
-    function get(){
+    function get()
+    {
+        $data = Product::all();
+
         return response()->json(
             [
-                "message" => "GET Method Success"
+                "message" => "Success",
+                "data" => $data
             ]
         );
     }
 
-    function put($id){
+    function getById($id)
+    {
+        $data = Product::where('id',$id)->first();
+        
+        return response()->json(
+            [
+                "message" => "Success",
+                "data" => $data
+            ]
+        );
+    }
+
+    function put($id)
+    {
         return response()->json(
             [
                 "message" => "PUT Method Success ". $id
@@ -38,7 +56,8 @@ class ProductController extends Controller
         );
     }
 
-    function delete($id){
+    function delete($id)
+    {
         return response()->json(
             [
                 "message" => "DELETE Method Success ". $id
